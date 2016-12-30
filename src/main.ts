@@ -1,3 +1,5 @@
+import * as canvas from './canvas'
+
 type Vector = [number, number, number];
 type Point = [number, number, number];
 
@@ -108,8 +110,4 @@ for (let i = 0; i < width; i++) {
   }
 }
 
-let image = grid.map((row) => {
-  return row.map((cell) => cell ? '*' : ' ').join('')
-}).join('\n');
-
-console.log(image);
+canvas.draw(grid);
