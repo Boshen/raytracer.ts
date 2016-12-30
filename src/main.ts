@@ -1,4 +1,4 @@
-import * as canvas from './canvas'
+import { Canvas } from './canvas'
 
 type Vector = [number, number, number];
 type Point = [number, number, number];
@@ -77,8 +77,8 @@ function unitV(v: Vector) {
   return mul(1 / lengthV(v), v)
 }
 
-const width = 10;
-const height = 10;
+const width = 500;
+const height = 500;
 const pixsize = 0.1;
 
 const focal: Point = [0, 0, -10];
@@ -90,14 +90,13 @@ const vpNormal = unitV(sub(dir, focal));
 const vpRight = unitV(cross(vpNormal, vert));
 const vpUp = unitV(cross(vpRight, vpNormal));
 
-const radius = 3;
-const center: Point = [0, 0, 5];
+const radius = 100;
+const center: Point = [0, 0, 100];
 const sphere = new Sphere(radius, center);
 
-const grid = [];
+const canvas = new Canvas(width, height)
 
 for (let i = 0; i < width; i++) {
-  grid.push([]);
   for (let j = 0; j < height; j++) {
     const x = (i - width / 2) * pixsize;
     const y = (j - height / 2) * pixsize;
@@ -106,8 +105,6 @@ for (let i = 0; i < width; i++) {
     const line = unitV(add(add(vpNormal, xv), yv));
     const ray = new Line(focal, line);
     const intersect = sphere.intersection(ray);
-    grid[i].push(intersect);
+    canvas.draw(i, j, intersect ? 'black' : 'white');
   }
 }
-
-canvas.draw(grid);

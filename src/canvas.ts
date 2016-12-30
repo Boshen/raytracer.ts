@@ -1,14 +1,19 @@
-const canvas = <HTMLCanvasElement> document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-document.body.appendChild(canvas);
+export class Canvas {
 
-export function draw(grid: boolean[][]) {
-  grid.forEach((row, i) => {
-    row.forEach((draw, j) => {
-      const fillStyle = draw ? 'black' : 'white';
-      ctx.fillStyle = fillStyle;
-      ctx.fillRect(i, j, 1, 1);
-    });
-  });
+  private canvas: HTMLCanvasElement
+  private ctx
+
+  constructor(width: number, height: number) {
+    this.canvas = <HTMLCanvasElement> document.createElement('canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.canvas.width  = 500;
+    this.canvas.height = 500;
+    document.body.appendChild(this.canvas);
+  }
+
+  public draw(x: number, y: number, color: string) {
+    this.ctx.fillStyle = color;
+    this.ctx.fillRect(x, y, 1, 1);
+  }
 
 }
