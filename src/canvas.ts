@@ -6,8 +6,8 @@ export class Canvas {
   constructor(width: number, height: number) {
     this.canvas = <HTMLCanvasElement> document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.canvas.width  = 500;
-    this.canvas.height = 500;
+    this.canvas.width  = width;
+    this.canvas.height = height;
     document.body.appendChild(this.canvas);
   }
 

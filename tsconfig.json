@@ -1,6 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "module": "commonjs"
+    "module": "commonjs",
+
+    "newLine": "lf",
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictNullChecks": true
   }
 }

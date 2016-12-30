@@ -11,7 +11,6 @@ const pixsize = 0.1;
 
 const focal = new Vector(0, 0, -10);
 const dir = new Vector(0, 0, 10);
-const horz = new Vector(1, 0, 0);
 const vert = new Vector(0, 1, 0);
 
 const vpNormal = dir.sub(focal).unit();

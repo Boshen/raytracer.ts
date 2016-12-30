@@ -1,5 +1,3 @@
-import { Point } from './point'
-
 export class Vector {
 
   public x: number

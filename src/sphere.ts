@@ -1,5 +1,4 @@
 import { Point } from './point'
-import { Vector } from './vector'
 import { Line } from './line'
 
 export class Sphere {
