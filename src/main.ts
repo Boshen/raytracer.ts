@@ -7,31 +7,53 @@ import { Vector } from  './vector'
 
 const width = 500;
 const height = 500;
-const pixsize = 0.1;
+const depth = 0;
 
-const focal = new Vector(0, 0, -10);
-const dir = new Vector(0, 0, 10);
-const vert = new Vector(0, 1, 0);
+// canvas box
+const left = -width / 2;
+const right = width / 2;
+const bottom = -height / 2;
+const top = height / 2;
 
-const vpNormal = dir.sub(focal).unit();
-const vpRight = vpNormal.cross(vert).unit();
-const vpUp = vpRight.cross(vpNormal).unit();
+// const light = new Point(1000, 1000, 0);
+const eye = new Vector(0, 0, -100);
 
-const radius = 100;
-const center = new Point(0, 0, 100);
-const sphere = new Sphere(radius, center);
+// u-v-w coordinate from the eye
+const u = new Vector(1, 0, 0);
+const v = new Vector(0, 1, 0);
+const w = new Vector(0, 0, 1);
+
+const spheres = [
+  new Sphere(20, new Point(0, 10, -50), 'red'),
+  new Sphere(20, new Point(20, 10, 5), 'green'),
+  new Sphere(10, new Point(20, 0, 20), 'blue')
+];
 
 const canvas = new Canvas(width, height)
 
 for (let i = 0; i < width; i++) {
   for (let j = 0; j < height; j++) {
-    const x = (i - width / 2) * pixsize;
-    const y = (j - height / 2) * pixsize;
-    const xv = vpRight.scale(x);
-    const yv = vpUp.scale(y);
-    const line = vpNormal.add(xv).add(yv).unit();
-    const ray = new Line(focal, line);
-    const intersect = sphere.intersection(ray);
-    canvas.draw(i, j, intersect ? 'black' : 'white');
+    // transformed pixel position
+    const us = left + (right - left) * ((i + 0.5) / width);
+    const vs = bottom + (top - bottom) * ((j + 0.5) / height);
+    const ws = depth;
+    // point s on the screen
+    const s = eye.add(u.scale(us)).add(v.scale(vs)).add(w.scale(ws)).unit();
+    const ray = new Line(eye, s);
+    const color = trace(ray);
+    canvas.draw(i, j, color);
   }
+}
+
+function trace(ray: Line): string {
+  let minD = Infinity;
+  let color = 'white';
+  spheres.forEach((sphere) => {
+    const d = sphere.intersection(ray);
+    if (d < minD) {
+      minD = d;
+      color = sphere.color;
+    }
+  });
+  return color
 }

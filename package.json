@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "webpack-dev-server",
+    "node": "ts-node ./src/main.ts",
     "build": "webpack"
   },
   "repository": {
@@ -11,6 +12,7 @@
   },
   "author": "Boshen",
   "devDependencies": {
+    "@types/node": "^6.0.55",
     "html-webpack-plugin": "^2.24.1",
     "ts-loader": "^1.3.3",
     "typescript": "^2.1.4",

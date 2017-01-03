@@ -2,15 +2,11 @@ import { Vector } from './vector'
 
 export class Point {
 
-  public x: number
-  public y: number
-  public z: number
-
-  constructor(x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-  }
+  constructor(
+    public x: number,
+    public y: number,
+    public z: number
+  ) { }
 
   public sub(p: Point): Vector {
     return new Vector(
