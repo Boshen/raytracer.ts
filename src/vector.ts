@@ -1,5 +1,3 @@
-import { Point } from './point'
-
 export class Vector {
 
   public x: number
@@ -28,6 +26,14 @@ export class Vector {
     )
   }
 
+  public translate(n: number): Vector {
+    return new Vector(
+      this.x + n,
+      this.y + n,
+      this.z + n
+    )
+  }
+
   public sub(v: Vector): Vector {
     return new Vector(
       this.x - v.x,
@@ -41,14 +47,6 @@ export class Vector {
       p * this.x,
       p * this.y,
       p * this.z
-    )
-  }
-
-  public translate(p: Point): Vector {
-    return new Vector(
-      p.x + this.x,
-      p.y + this.y,
-      p.z + this.z
     )
   }
 

@@ -1,14 +1,18 @@
-import { Point } from './point'
 import { Vector } from './vector'
 
 export class Line {
-  public point: Point
-  public vector: Vector
-  constructor(p: Point, v: Vector) {
-    this.point = p;
-    this.vector = v;
+
+  constructor(
+    public origin: Vector,
+    public line: Vector
+  ) { }
+
+  public getPoint(distance: number): Vector {
+    return this.origin.add(this.line.scale(distance))
   }
+
   public toString() {
-    return `point: ${this.point}, vector: ${this.vector}`
+    return `origin: ${this.origin}, line: ${this.line}`
   }
+
 }
