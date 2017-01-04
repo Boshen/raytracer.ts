@@ -27,7 +27,7 @@ for (let i = 0; i < width; i++) {
   for (let j = 0; j < height; j++) {
     // transformed pixel position
     const us = (i - width / 2.0) / width;
-    const vs = (j - height / 2.0) / height;
+    const vs = -(j - height / 2.0) / height;
     // eye -> line direction vector
     const s = (u.scale(us)).add(v.scale(vs)).add(w).unit();
     const ray = new Line(eye, s);
@@ -49,14 +49,16 @@ function trace(ray: Line): string {
   });
   if (minD !== Infinity) {
     // trace ray from intersection point to light source
+    // add a offset so shadow ray will not intersect with the origin object itself
     const point = ray.getPoint(minD);
-    const shadowRay = new Line(point, light.sub(point).unit());
+    const shadowDirection = light.sub(point).unit();
+    const shadowRay = new Line(point.add(shadowDirection.scale(0.001)), shadowDirection);
     minD = Infinity;
     spheres.forEach((sphere) => {
       const d = sphere.intersection(shadowRay);
       if (d < minD) {
         minD = d;
-        color = sphere.color;
+        color = 'black';
       }
     });
   }
