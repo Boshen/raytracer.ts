@@ -9,6 +9,10 @@ export class Sphere {
     public color: string
   ) { }
 
+  public normal(p: Vector): Vector {
+    return p.sub(this.center)
+  }
+
   public intersection(ray: Line): number {
     // (-b +- sqrt(b^2 - a*c)) / a
     const originToCenter = ray.origin.sub(this.center)

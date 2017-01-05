@@ -16,9 +16,9 @@ const v = new Vector(0, 1, 0);
 const w = new Vector(0, 0, 1);
 
 const spheres = [
-  new Sphere(30, new Vector(0, 0, 0), 'red'),
-  new Sphere(10, new Vector(0, 50, -10), 'green'),
-  new Sphere(5, new Vector(60, 0, 20), 'blue')
+  new Sphere(30, new Vector(0, 0, 0), 'black'),
+  new Sphere(10, new Vector(0, 50, -10), 'black'),
+  new Sphere(5, new Vector(60, 0, 20), 'black')
 ];
 
 const canvas = new Canvas(width, height)
@@ -39,18 +39,22 @@ for (let i = 0; i < width; i++) {
 function trace(ray: Line): string {
   let minD = Infinity;
   let color = 'white';
+  let intersectionObject;
   // trace ray from eye to objects
   spheres.forEach((sphere) => {
     const d = sphere.intersection(ray);
     if (d < minD) {
       minD = d;
       color = sphere.color;
+      intersectionObject = sphere;
     }
   });
-  if (minD !== Infinity) {
+
+  const point = ray.getPoint(minD);
+
+  if (intersectionObject) {
     // trace ray from intersection point to light source
     // add a offset so shadow ray will not intersect with the origin object itself
-    const point = ray.getPoint(minD);
     const shadowDirection = light.sub(point).unit();
     const shadowRay = new Line(point.add(shadowDirection.scale(0.001)), shadowDirection);
     minD = Infinity;
@@ -62,5 +66,15 @@ function trace(ray: Line): string {
       }
     });
   }
+
+  // the object is not in the shadow
+  // compute facing ratio for the shadow
+  if (intersectionObject && minD === Infinity) {
+    const normal = intersectionObject.normal(point);
+    const inverseRay = ray.line.scale(-1);
+    const ratio = Math.round(normal.dot(inverseRay) * 10);
+    color = `rgb(${ratio},${ratio},${ratio})`;
+  }
+
   return color
 }
