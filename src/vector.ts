@@ -1,14 +1,10 @@
 export class Vector {
 
-  public x: number
-  public y: number
-  public z: number
-
-  constructor(x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-  }
+  constructor(
+    public x,
+    public y,
+    public z
+  ) { }
 
   public length(): number {
     return Math.sqrt(this.dot(this))
