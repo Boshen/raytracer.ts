@@ -6,7 +6,7 @@ export class Sphere {
   constructor(
     public radius: number,
     public center: Vector,
-    public color: string
+    public color: Vector
   ) { }
 
   public normal(p: Vector): Vector {

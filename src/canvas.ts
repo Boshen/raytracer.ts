@@ -1,3 +1,5 @@
+import { Vector } from './vector'
+
 let isNode = false
 try {
  isNode = Object.prototype.toString.call(global.process) === '[object process]'
@@ -23,13 +25,13 @@ export class Canvas {
     }
   }
 
-  public drawCanvas(x: number, y: number, color: string) {
-    this.ctx.fillStyle = color;
+  public drawCanvas(x: number, y: number, color: Vector) {
+    this.ctx.fillStyle = `rgb(${color.x}, ${color.y}, ${color.z})`;
     this.ctx.fillRect(x, y, 1, 1);
   }
 
-  public drawConsole(_: number, y: number, color: string) {
-    const s = color === 'white' ?  ' ' : '*';
+  public drawConsole(_: number, y: number, color: Vector) {
+    const s = color.x + color.y + color.z === 255 * 3 ?  ' ' : '*';
     process.stdout.write(s);
     if (y  === this.width - 1) {
       process.stdout.write('\n');

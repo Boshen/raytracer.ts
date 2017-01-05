@@ -16,9 +16,9 @@ const v = new Vector(0, 1, 0);
 const w = new Vector(0, 0, 1);
 
 const spheres = [
-  new Sphere(30, new Vector(0, 0, 0), 'black'),
-  new Sphere(10, new Vector(0, 50, -10), 'black'),
-  new Sphere(5, new Vector(60, 0, 20), 'black')
+  new Sphere(30, new Vector(0, 0, 0), new Vector(255, 0, 0)),
+  new Sphere(10, new Vector(0, 50, -10), new Vector(0, 255, 0)),
+  new Sphere(5, new Vector(60, 0, 20), new Vector(0, 0, 255))
 ];
 
 const canvas = new Canvas(width, height)
@@ -36,9 +36,9 @@ for (let i = 0; i < width; i++) {
   }
 }
 
-function trace(ray: Line): string {
+function trace(ray: Line): Vector {
   let minD = Infinity;
-  let color = 'white';
+  let color = new Vector(255, 255, 255);
   let intersectionObject;
   // trace ray from eye to objects
   spheres.forEach((sphere) => {
@@ -62,7 +62,7 @@ function trace(ray: Line): string {
       const d = sphere.intersection(shadowRay);
       if (d < minD) {
         minD = d;
-        color = 'black';
+        color = new Vector(0, 0, 0);
       }
     });
   }
@@ -73,7 +73,7 @@ function trace(ray: Line): string {
     const normal = intersectionObject.normal(point);
     const inverseRay = ray.line.scale(-1);
     const ratio = Math.round(normal.dot(inverseRay) * 10);
-    color = `rgb(${ratio},${ratio},${ratio})`;
+    color = new Vector(ratio, ratio, ratio);
   }
 
   return color
