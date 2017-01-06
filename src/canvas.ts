@@ -26,7 +26,10 @@ export class Canvas {
   }
 
   public drawCanvas(x: number, y: number, color: Vector) {
-    this.ctx.fillStyle = `rgb(${color.x}, ${color.y}, ${color.z})`
+    const r = Math.round(color.x)
+    const g = Math.round(color.y)
+    const b = Math.round(color.z)
+    this.ctx.fillStyle = `rgb(${r},${g},${b})`
     this.ctx.fillRect(x, y, 1, 1)
   }
 

@@ -6,7 +6,9 @@ export class Sphere {
   constructor(
     public radius: number,
     public center: Vector,
-    public color: Vector
+    public color: Vector,
+    public diffuse: number = 0.9,
+    public ambient: number = 0.1
   ) { }
 
   public normal(p: Vector): Vector {

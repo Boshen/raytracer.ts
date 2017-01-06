@@ -1,5 +1,6 @@
 import { Line } from './line'
 import { Sphere } from './sphere'
+import { Light } from './light'
 import { Canvas } from './canvas'
 
 import { Vector } from  './vector'
@@ -7,7 +8,7 @@ import { Vector } from  './vector'
 const width = 500
 const height = 500
 
-const light = new Vector(0, 1000, 0)
+const light = new Light(new Vector(0, 1000, 0), 1000)
 const eye = new Vector(0, 0, -200)
 
 // u-v-w coordinate from the eye
@@ -52,10 +53,11 @@ function trace(ray: Line): Vector {
 
   const point = ray.getPoint(minD)
 
+  // compute shadow
   if (intersectionObject) {
     // trace ray from intersection point to light source
     // add a offset so shadow ray will not intersect with the origin object itself
-    const shadowDirection = light.sub(point).unit()
+    const shadowDirection = light.source.sub(point).unit()
     const shadowRay = new Line(point.add(shadowDirection.scale(0.001)), shadowDirection)
     minD = Infinity
     spheres.forEach((sphere) => {
@@ -68,12 +70,14 @@ function trace(ray: Line): Vector {
   }
 
   // the object is not in the shadow
-  // compute facing ratio for the shadow
+  // compute diffuse shading
   if (intersectionObject && minD === Infinity) {
-    const normal = intersectionObject.normal(point)
-    const inverseRay = ray.line.scale(-1)
-    const ratio = Math.round(normal.dot(inverseRay) * 10)
-    color = new Vector(ratio, ratio, ratio)
+    const normal = intersectionObject.normal(point).unit()
+    const l = light.source.sub(point).unit()
+    const factor = Math.max(0, normal.dot(l))
+    color = intersectionObject.color
+      .scale(factor * intersectionObject.diffuse)
+      .add(intersectionObject.color.scale(intersectionObject.ambient))
   }
 
   return color
