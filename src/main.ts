@@ -8,8 +8,10 @@ import { Vector } from  './vector'
 const width = 500
 const height = 500
 
-const light = new Light(new Vector(0, 1000, 0), 1000)
 const eye = new Vector(0, 0, -200)
+
+const light = new Light(new Vector(0, 1000, 0), 1000)
+const background = new Vector(0, 0, 0)
 
 // u-v-w coordinate from the eye
 const u = new Vector(1, 0, 0)
@@ -39,7 +41,7 @@ for (let i = 0; i < width; i++) {
 
 function trace(ray: Line): Vector {
   let minD = Infinity
-  let color = new Vector(255, 255, 255)
+  let color = background
   let intersectionObject
   // trace ray from eye to objects
   spheres.forEach((sphere) => {
@@ -64,9 +66,11 @@ function trace(ray: Line): Vector {
       const d = sphere.intersection(shadowRay)
       if (d < minD) {
         minD = d
-        color = new Vector(0, 0, 0)
       }
     })
+    if (minD !== Infinity)  {
+      color = intersectionObject.color.scale(intersectionObject.ambient)
+    }
   }
 
   // the object is not in the shadow
