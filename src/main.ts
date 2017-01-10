@@ -32,15 +32,17 @@ const canvas = new Canvas(width, height)
 for (let i = 0; i < width; i++) {
   for (let j = 0; j < height; j++) {
     // transformed pixel position
-    const us = (i - width / 2.0) / width
-    const vs = -(j - height / 2.0) / height
+    const us = (i - width / 2) / width
+    const vs = (height / 2 - j) / height
     // eye -> line direction vector
     const s = (u.scale(us)).add(v.scale(vs)).add(w).unit()
     const ray = new Line(eye, s)
     const color = trace(ray, 0) || background
-    canvas.draw(i, j, color)
+    canvas.addPixel(i, j, color)
   }
 }
+
+canvas.render()
 
 function trace(ray: Line, depth: number, object?: Sphere): Vector | null {
   if (depth > 3) {
