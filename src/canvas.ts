@@ -8,7 +8,7 @@ try {
 export class Canvas {
 
   private canvas: HTMLCanvasElement
-  private ctx
+  private ctx: CanvasRenderingContext2D | null
 
   public draw: Function
 
@@ -29,8 +29,10 @@ export class Canvas {
     const r = Math.round(color.x)
     const g = Math.round(color.y)
     const b = Math.round(color.z)
-    this.ctx.fillStyle = `rgb(${r},${g},${b})`
-    this.ctx.fillRect(x, y, 1, 1)
+    if (this.ctx) {
+      this.ctx.fillStyle = `rgb(${r},${g},${b})`
+      this.ctx.fillRect(x, y, 1, 1)
+    }
   }
 
   public drawConsole(_: number, y: number, color: Vector) {

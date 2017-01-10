@@ -1,9 +1,9 @@
 export class Vector {
 
   constructor(
-    public x,
-    public y,
-    public z
+    public x: number,
+    public y: number,
+    public z: number
   ) { }
 
   public length(): number {

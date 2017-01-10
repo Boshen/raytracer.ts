@@ -37,12 +37,12 @@ for (let i = 0; i < width; i++) {
     // eye -> line direction vector
     const s = (u.scale(us)).add(v.scale(vs)).add(w).unit()
     const ray = new Line(eye, s)
-    const color = trace(ray, 0, null) || background
+    const color = trace(ray, 0) || background
     canvas.draw(i, j, color)
   }
 }
 
-function trace(ray: Line, depth, object?): Vector | null {
+function trace(ray: Line, depth: number, object?: Sphere): Vector | null {
   if (depth > 3) {
     return new Vector(0, 0, 0)
   }
@@ -63,10 +63,10 @@ function trace(ray: Line, depth, object?): Vector | null {
   }
 
   const point = ray.getPoint(minD)
-  return hit(ray, point, object, depth)
+  return hit(ray, point, object!, depth)
 }
 
-function hit(ray, point, object, depth) {
+function hit(ray: Line, point: Vector, object: Sphere, depth: number): Vector {
   const normal = object.normal(point).unit()
 
   let lambert = 0

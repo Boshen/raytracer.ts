@@ -4,7 +4,7 @@
     "module": "commonjs",
 
     "newLine": "lf",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
