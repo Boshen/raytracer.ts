@@ -7,8 +7,9 @@ export class Sphere {
     public radius: number,
     public center: Vector,
     public color: Vector,
-    public diffuse: number = 0.9,
-    public ambient: number = 0.1
+    public lambert: number = 0.7,
+    public ambient: number = 0.1,
+    public specular: number = 0.2
   ) { }
 
   public normal(p: Vector): Vector {
