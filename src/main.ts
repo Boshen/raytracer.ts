@@ -10,7 +10,10 @@ const height = 500
 
 const eye = new Vector(0, 0, -200)
 
-const light = new Light(new Vector(0, 1000, 0), 1000)
+const lights = [
+  new Light(new Vector(0, 1000, 0), 1000),
+  new Light(new Vector(1000, 0, 0), 1000)
+]
 const background = new Vector(0, 0, 0)
 
 // u-v-w coordinate from the eye
@@ -21,7 +24,7 @@ const w = new Vector(0, 0, 1)
 const spheres = [
   new Sphere(30, new Vector(0, 0, 0), new Vector(255, 0, 0)),
   new Sphere(10, new Vector(0, 50, -10), new Vector(0, 255, 0)),
-  new Sphere(5, new Vector(60, 0, 20), new Vector(0, 0, 255))
+  new Sphere(5, new Vector(60, 0, -10), new Vector(0, 0, 255))
 ]
 
 const canvas = new Canvas(width, height)
@@ -41,48 +44,51 @@ for (let i = 0; i < width; i++) {
 
 function trace(ray: Line): Vector {
   let minD = Infinity
-  let color = background
   let intersectionObject
   // trace ray from eye to objects
   spheres.forEach((sphere) => {
     const d = sphere.intersection(ray)
     if (d < minD) {
       minD = d
-      color = sphere.color
       intersectionObject = sphere
     }
   })
 
-  const point = ray.getPoint(minD)
 
   // compute shadow
-  if (intersectionObject) {
-    // trace ray from intersection point to light source
-    // add a offset so shadow ray will not intersect with the origin object itself
+  if (!intersectionObject) {
+    return background
+  }
+
+  const point = ray.getPoint(minD)
+  // let resultColor = new Vector(0, 0, 0)
+
+  let ldiffuse = 0
+  for (let light of lights) {
+    minD = Infinity
+
+    // compute shading
+    // trace ray from intersection point to light source add a offset so shadow ray will not intersect with the origin object itself
     const shadowDirection = light.source.sub(point).unit()
     const shadowRay = new Line(point.add(shadowDirection.scale(0.001)), shadowDirection)
-    minD = Infinity
-    spheres.forEach((sphere) => {
+    for (let sphere of spheres) {
       const d = sphere.intersection(shadowRay)
       if (d < minD) {
         minD = d
+        break
       }
-    })
-    if (minD !== Infinity)  {
-      color = intersectionObject.color.scale(intersectionObject.ambient)
     }
-  }
+    if (minD !== Infinity) {
+      continue
+    }
 
-  // the object is not in the shadow
-  // compute diffuse shading
-  if (intersectionObject && minD === Infinity) {
+    // compute diffuse shading
     const normal = intersectionObject.normal(point).unit()
     const l = light.source.sub(point).unit()
-    const factor = Math.max(0, normal.dot(l))
-    color = intersectionObject.color
-      .scale(factor * intersectionObject.diffuse)
-      .add(intersectionObject.color.scale(intersectionObject.ambient))
+    ldiffuse += Math.max(0, normal.dot(l))
   }
 
-  return color
+  ldiffuse = Math.min(1, ldiffuse)
+  return intersectionObject.color.scale(intersectionObject.diffuse * ldiffuse)
+    .add(intersectionObject.color.scale(intersectionObject.ambient))
 }
